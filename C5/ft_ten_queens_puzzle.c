@@ -1,4 +1,5 @@
 #include <unistd.h>
+
 int check(int row[], int n)
 {
     int i;
@@ -7,6 +8,7 @@ int check(int row[], int n)
     {
         if (row[i] == row[n] || row[n] - row[i] == n-i || row[n] - row[i] == i -n)
             return (0);
+        ++i;
     }
     return (1);
 }
@@ -22,14 +24,12 @@ void print_result(int row[], int NQ)
         c += row[i];
         write(1,&c,1);
         c = '0';
+        ++i;
     }
-    write(1,"¥n",1);
+    write(1,"\n",1);
 }
-int back_tracking(int row[], int n, int NQ)
+void back_tracking(int row[], int n, int NQ, int *count)
 {
-    int count;
-
-    count = 0;
     row[n] = 0;
     while (row[n] < NQ)
     {
@@ -38,23 +38,23 @@ int back_tracking(int row[], int n, int NQ)
             if(n == NQ - 1)
             {
                 print_result(row,NQ);
-                count += 1;
+                *count += 1;
             }
             else
-                back_tracking(row, n+1, NQ);
+                back_tracking(row, n+1, NQ, count);
         }
         row[n] += 1;
     }
-    return (count);
 }
-#include <stdio.h>
 int ft_ten_queens_puzzle(void)
 {
     int row[10];
     int count;
-    count = back_tracking(row, 0, 10);
+
+    count = 0;
+    back_tracking(row, 0, 10, &count);
     return (count);
 }
-int main(){
-    printf("%d", ft_ten_queens_puzzle());
-}
+// int main(){
+//     printf("%d",ft_ten_queens_puzzle());
+// }
